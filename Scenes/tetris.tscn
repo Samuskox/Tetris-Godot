@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://b5o6agov14shm"]
+
+[ext_resource type="Script" uid="uid://bm8rxumy7bw3o" path="res://Scripts/tetris.gd" id="1_t8p3t"]
+[ext_resource type="Script" uid="uid://diukpu7g6cblh" path="res://Scenes/piece.gd" id="2_bkqy2"]
+[ext_resource type="Script" uid="uid://ffhgk1jgx8hr" path="res://Scenes/score.gd" id="3_2i8ab"]
+
+[node name="Tetris" type="Node2D"]
+script = ExtResource("1_t8p3t")
+
+[node name="Piece" type="Node2D" parent="."]
+script = ExtResource("2_bkqy2")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(104, 324)
+
+[node name="Score" type="Label" parent="."]
+offset_left = -452.0
+offset_top = 18.0
+offset_right = -357.0
+offset_bottom = 44.0
+text = "Pontos: 0"
+script = ExtResource("3_2i8ab")
+
+[node name="Timer" type="Timer" parent="."]
