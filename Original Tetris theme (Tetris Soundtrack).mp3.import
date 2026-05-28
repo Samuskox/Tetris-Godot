@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://nhkws4i6x8bo"
+path="res://.godot/imported/Original Tetris theme (Tetris Soundtrack).mp3-60d9aad755a8327b0a1c9df35d7dd89b.mp3str"
+
+[deps]
+
+source_file="res://Original Tetris theme (Tetris Soundtrack).mp3"
+dest_files=["res://.godot/imported/Original Tetris theme (Tetris Soundtrack).mp3-60d9aad755a8327b0a1c9df35d7dd89b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

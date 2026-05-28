@@ -50,10 +50,10 @@ const zP: Array[Vector2] = [
 ]
 
 const tP: Array[Vector2] = [
-	Vector2(0,-1),
+	Vector2(-1,0),
 	Vector2(0,0),
 	Vector2(1,0),
-	Vector2(0,1)
+	Vector2(0,-1)
 ]
 
 const oP: Array[Vector2] = [
@@ -118,10 +118,11 @@ func _ready() -> void:
 	
 	main_script = get_node("/root/Tetris")
 	var timer := $"../Timer"
+	updateGhostPosition()
 	#add_child(timer)
 	timer.timeout.connect(fall)
 	timer.autostart = true
-	timer.wait_time = 1.0
+	timer.wait_time = 0.5
 	timer.start(1)
 
 func _draw() -> void:
@@ -198,7 +199,9 @@ func rotate_piece() -> Array[Vector2]:
 	updateGhostPosition()
 	return blocks
 
-func isValidmove(target_position: Vector2, target_blocks: Array[Vector2] = blocks) -> bool:
+func isValidmove(target_position: Vector2, target_blocks: Array[Vector2] = []) -> bool:
+	if target_blocks.is_empty():
+		target_blocks = blocks
 	if not main_script:
 		return true
 	
@@ -220,12 +223,16 @@ func isValidmove(target_position: Vector2, target_blocks: Array[Vector2] = block
 	return true
 	
 func updateGhostPosition():
+	if not main_script:   # sai se ainda não conectou
+		return
+	if blocks.is_empty(): # sai se a peça ainda não foi inicializada
+		return
 	var testPosition = gridPosition
 	ghostBlocks = blocks
 	var ghostFalling = true
 	
 	while ghostFalling:
-		if isValidmove(testPosition + Vector2(0,1), ghostBlocks) and testPosition.y < main_script.GridHeight:
+		if isValidmove(testPosition + Vector2(0,1), ghostBlocks):
 			testPosition += Vector2(0,1)
 		else:
 			ghostFalling = false

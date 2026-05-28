@@ -1,11 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://b5o6agov14shm"]
+[gd_scene load_steps=7 format=3 uid="uid://b5o6agov14shm"]
 
 [ext_resource type="Script" uid="uid://bm8rxumy7bw3o" path="res://Scripts/tetris.gd" id="1_t8p3t"]
 [ext_resource type="Script" uid="uid://diukpu7g6cblh" path="res://Scenes/piece.gd" id="2_bkqy2"]
+[ext_resource type="Texture2D" uid="uid://dvrwyjvepredu" path="res://Bloco.png" id="2_s5c7p"]
 [ext_resource type="Script" uid="uid://ffhgk1jgx8hr" path="res://Scenes/score.gd" id="3_2i8ab"]
+[ext_resource type="FontFile" uid="uid://cuw1y5asxora7" path="res://Tetris.ttf" id="4_s5c7p"]
+[ext_resource type="AudioStream" uid="uid://nhkws4i6x8bo" path="res://Original Tetris theme (Tetris Soundtrack).mp3" id="6_e7ark"]
 
 [node name="Tetris" type="Node2D"]
 script = ExtResource("1_t8p3t")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.45098)
+show_behind_parent = true
+offset_right = 322.0
+offset_bottom = 646.0
+texture = ExtResource("2_s5c7p")
+stretch_mode = 1
 
 [node name="Piece" type="Node2D" parent="."]
 script = ExtResource("2_bkqy2")
@@ -14,11 +25,32 @@ script = ExtResource("2_bkqy2")
 position = Vector2(104, 324)
 
 [node name="Score" type="Label" parent="."]
-offset_left = -452.0
-offset_top = 18.0
-offset_right = -357.0
-offset_bottom = 44.0
-text = "Pontos: 0"
+texture_filter = 1
+offset_left = -213.0
+offset_top = 25.0
+offset_right = -50.0
+offset_bottom = 59.0
+theme_override_fonts/font = ExtResource("4_s5c7p")
+theme_override_font_sizes/font_size = 30
+text = "Pontos: "
 script = ExtResource("3_2i8ab")
 
+[node name="Lines" type="Label" parent="."]
+texture_filter = 1
+offset_left = -212.0
+offset_top = 169.0
+offset_right = -118.0
+offset_bottom = 200.0
+theme_override_fonts/font = ExtResource("4_s5c7p")
+theme_override_font_sizes/font_size = 30
+text = "Lines:"
+
 [node name="Timer" type="Timer" parent="."]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_e7ark")
+volume_db = -23.35
+autoplay = true
+parameters/looping = true
+
+[connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]

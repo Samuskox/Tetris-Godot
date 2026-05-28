@@ -14,10 +14,17 @@ var goingdown = false
 
 var bagPieces: Array[int] = []
 var score := 0
+var lines := 0
 @onready var score_label = $Score
+@onready var lines_label = $Lines
 var gameover := false
 
+var boxPosition = Vector2(-6, 9)
+var boxPiecePosition = Vector2(-5, 10)
 
+var nextPiece: int
+
+@onready var song : AudioStreamPlayer = $AudioStreamPlayer
 
 func _ready() -> void:
 	
@@ -31,16 +38,21 @@ func _ready() -> void:
 	#grid[4][7] = 3
 	#grid[6][7] = 3
 	#grid[5][8] = 3
-	for x in range(GridWidth - 1):
-		grid[x][19] = (randi() % 7 + 1)
-		
-	for x in range(GridWidth - 1):
-		grid[x][18] = (randi() % 7 + 1)
+	#for x in range(GridWidth - 1):
+		#grid[x][19] = (randi() % 7 + 1)
+		#
+	#for x in range(GridWidth - 1):
+		#grid[x][18] = (randi() % 7 + 1)
+	#
+	#for x in range(GridWidth - 1):
+		#grid[x][17] = (randi() % 7 + 1)
 	
-	for x in range(GridWidth - 1):
-		grid[x][17] = (randi() % 7 + 1)
-			
+	if bagPieces.is_empty():
+		refillBag()
+	
 	spawnPiece()
+	
+	score_label.text = "Pontos: \n  " + str(score)
 	
 
 func _process(delta: float) -> void:
@@ -97,6 +109,44 @@ func _draw() -> void:
 				draw_rect(Rect2(Vector2(x,y) * cellSize, Vector2(cellSize - 1,cellSize - 1)),Color.DARK_BLUE)
 			elif grid[x][y] == 8:
 				draw_rect(Rect2(Vector2(x,y) * cellSize, Vector2(cellSize - 1,cellSize - 1)),Color("031b24"))
+	
+	var preview_box = Rect2(boxPosition * cellSize, Vector2((cellSize * 4) + 30, (cellSize * 4)))
+	draw_rect(preview_box, Color(0.1, 0.1, 0.1), true) # Fundo escuro
+	draw_rect(preview_box, Color.WHITE, false, 2.0)
+	
+	for block in piece.blocks:
+		var x = (boxPosition.x + block.x) * cellSize
+		var y = (boxPosition.y + block.y) * cellSize
+		
+		var colorNum = piece.num
+		var color
+		match colorNum:
+			1:
+				color = Color.CYAN
+				draw_rect(Rect2(Vector2(x + 50, y + 45), Vector2(cellSize - 2, cellSize - 2)), color)
+			2:
+				color = Color.WEB_PURPLE
+				draw_rect(Rect2(Vector2(x + 65, y + 65), Vector2(cellSize - 2, cellSize - 2)), color)
+			3:
+				color = Color.RED
+				draw_rect(Rect2(Vector2(x + 80, y + 50), Vector2(cellSize - 2, cellSize - 2)), color)
+			4:
+				color = Color.LIGHT_GREEN
+				draw_rect(Rect2(Vector2(x + 65, y + 30), Vector2(cellSize - 2, cellSize - 2)), color)
+			5:
+				color = Color.YELLOW
+				draw_rect(Rect2(Vector2(x + 50, y + 30), Vector2(cellSize - 2, cellSize - 2)), color)
+			6:
+				color = Color.ORANGE
+				draw_rect(Rect2(Vector2(x + 65, y + 40), Vector2(cellSize - 2, cellSize - 2)), color)
+			7:
+				color = Color.DARK_BLUE
+				draw_rect(Rect2(Vector2(x + 65, y + 40), Vector2(cellSize - 2, cellSize - 2)), color)
+			8: 
+				color = Color("031b24")
+				draw_rect(Rect2(Vector2(x + 50, y + 40), Vector2(cellSize - 2, cellSize - 2)), color)
+		
+		#draw_rect(Rect2(Vector2(x + 50, y + 40), Vector2(cellSize - 2, cellSize - 2)), color)
 
 func spawnPiece():
 	print(bagPieces)
@@ -132,9 +182,11 @@ func cleanLine():
 		if isFull:
 			removeLine(y)
 			linesScores += 1
+			lines += 1
 		else:
 			y -= 1 #checa toda a linhas de baixo pra cima
 	updateScore(linesScores)
+	
 	linesScores = 0
 
 		
@@ -157,12 +209,13 @@ func updateScore(numlines: int):
 			score += 500
 		4: 
 			score += 800
-	score_label.text = "Pontos: " + str(score)
+	score_label.text = "Pontos: \n  " + str(score)
+	lines_label.text = "Lines: " + str(lines)
 	
 func triggerGameOver():
 	gameover = true
 	$Timer.stop()
-	score_label.text = "Pontos: " + str(score) + " || GAME OVER"
+	score_label.text = "Pontos: \n  " + str(score) + " \n------------\n GAME OVER"
 	for x in range(GridWidth):
 		for y in range(GridHeight):
 			if grid[x][y] > 0:
@@ -197,3 +250,8 @@ func refillBag():
 	
 
 	
+
+
+func _on_audio_stream_player_finished() -> void:
+	#song.play()
+	pass
